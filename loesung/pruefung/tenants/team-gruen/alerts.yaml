@@ -1,0 +1,22 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Provider
+metadata:
+  name: echo
+  namespace: team-gruen
+spec:
+  address: http://echo.echo.svc.cluster.local/
+  type: generic
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Alert
+metadata:
+  name: apps
+  namespace: team-gruen
+spec:
+  eventSeverity: info
+  eventSources:
+  - kind: Kustomization
+    name: apps
+  providerRef:
+    name: echo

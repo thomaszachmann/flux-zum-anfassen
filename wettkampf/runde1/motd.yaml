@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: motd
+  namespace: notes
+data:
+  text: Wartung am Samstag ab 8 Uhr

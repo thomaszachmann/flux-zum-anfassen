@@ -1,0 +1,36 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: notes-api
+  namespace: flux-system
+spec:
+  image: ghcr.io/thomaszachmann/notes-api
+  exclusionList:
+    - ^.*\.sig$
+    - ^sha
+  interval: 10m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: notes-api
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: notes-api
+  policy:
+    semver:
+      range: '>=0.5.0'
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: notes-api-rc
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: notes-api
+  policy:
+    semver:
+      range: '>=0.6.0-0 <0.7.0'

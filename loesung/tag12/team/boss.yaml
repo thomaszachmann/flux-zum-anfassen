@@ -1,0 +1,22 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: extra
+spec:
+  interval: 1m
+  insecure: true
+  url: oci://registry.registry.svc.cluster.local:5000/team-blau/extra
+  ref:
+    tag: 1.0.0
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: boss
+spec:
+  interval: 1m
+  path: ./
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: extra

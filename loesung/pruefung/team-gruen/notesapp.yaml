@@ -1,0 +1,7 @@
+apiVersion: lab.example.com/v1alpha1
+kind: NotesApp
+metadata:
+  name: gruen
+spec:
+  apiKey: gruen-key-123456
+  nodePort: 30095

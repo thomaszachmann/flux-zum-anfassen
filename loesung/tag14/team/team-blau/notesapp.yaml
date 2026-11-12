@@ -1,0 +1,7 @@
+apiVersion: lab.example.com/v1alpha1
+kind: NotesApp
+metadata:
+  name: blau
+spec:
+  apiKey: blau-key-123456
+  nodePort: 30094

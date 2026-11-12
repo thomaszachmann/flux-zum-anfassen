@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-test-version
+  annotations:
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.23.0
+      command: ["sh", "-c"]
+      args:
+        - test "$(curl -s http://{{ .Release.Name }}/version)" = "{{ .Values.image.tag | default .Chart.AppVersion }}"

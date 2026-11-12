@@ -1,0 +1,28 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: apps
+  namespace: team-blau
+spec:
+  insecure: true
+  interval: 1m0s
+  provider: generic
+  ref:
+    semver: '>=1.0.0'
+  url: oci://registry.registry.svc.cluster.local:5000/team-blau/apps
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: team-blau
+spec:
+  interval: 5m0s
+  path: ./
+  prune: true
+  serviceAccountName: team-blau
+  sourceRef:
+    kind: OCIRepository
+    name: apps
+  targetNamespace: team-blau

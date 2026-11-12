@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: notes
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: notes-db
+  interval: 5m0s
+  path: ./apps/notes/overlays/prod
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  timeout: 2m0s
+  wait: true
+  postBuild:
+    substitute:
+      NOTES_REPLICAS: "2"
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-vars

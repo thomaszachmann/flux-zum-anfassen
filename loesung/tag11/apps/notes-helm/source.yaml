@@ -1,0 +1,16 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: notes-chart
+  namespace: notes-helm
+spec:
+  insecure: true
+  interval: 5m0s
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  provider: generic
+  ref:
+    semver: 0.x
+  url: oci://registry.registry.svc.cluster.local:5000/charts/notes

@@ -1,0 +1,31 @@
+name: validate
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  manifests:
+    runs-on: ubuntu-24.04
+    env:
+      NOTES_VERSION: 0.0.0-ci
+      SCHEMAS: -schema-location default -schema-location /tmp/flux-schemas/{{.ResourceKind}}{{.KindSuffix}}.json
+    steps:
+      - uses: actions/checkout@v5
+      - uses: fluxcd/flux2/action@v2.10.0
+        with:
+          version: 2.10.0
+      - name: kubeconform und Flux-Schemas
+        run: |
+          curl -fsSL https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz | tar xz -C /usr/local/bin kubeconform
+          mkdir -p /tmp/flux-schemas
+          curl -fsSL https://github.com/fluxcd/flux2/releases/download/v2.10.0/crd-schemas.tar.gz | tar xz -C /tmp/flux-schemas
+      - name: Cluster lab
+        run: kubectl kustomize clusters/lab | kubeconform -strict -summary -skip Secret,CustomResourceDefinition $SCHEMAS
+      - name: Apps und Infrastruktur
+        run: |
+          for d in $(find apps infrastructure -name kustomization.yaml -exec dirname {} \;); do
+            echo "== $d"
+            kubectl kustomize $d | flux envsubst --strict | kubeconform -strict -summary -skip Secret $SCHEMAS
+          done
+      - name: Mandanten
+        run: kubeconform -strict -summary $SCHEMAS tenants

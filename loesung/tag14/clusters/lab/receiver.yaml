@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-receiver-nodeport
+  namespace: flux-system
+spec:
+  type: NodePort
+  selector:
+    app: notification-controller
+  ports:
+    - port: 80
+      targetPort: http-webhook
+      nodePort: 30900
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Receiver
+metadata:
+  name: github-fleet
+  namespace: flux-system
+spec:
+  events:
+  - ping
+  - push
+  resources:
+  - kind: GitRepository
+    name: flux-system
+  secretRef:
+    name: webhook-token
+  type: github

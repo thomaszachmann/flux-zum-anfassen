@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes
+  namespace: notes
+spec:
+  replicas: ${NOTES_REPLICAS:=1}
+  selector:
+    matchLabels:
+      app: notes
+  template:
+    metadata:
+      labels:
+        app: notes
+    spec:
+      initContainers:
+        - name: migrate
+          image: ghcr.io/thomaszachmann/notes-api:${NOTES_VERSION}
+          args: ["migrate"]
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notes-db
+                  key: password
+            - name: NOTES_DB_URL
+              value: postgres://notes:$(DB_PASSWORD)@notes-db:5432/notes?sslmode=disable
+      containers:
+        - name: api
+          image: ghcr.io/thomaszachmann/notes-api:${NOTES_VERSION}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NOTES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: notes-api
+                  key: apiKey
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notes-db
+                  key: password
+            - name: NOTES_DB_URL
+              value: postgres://notes:$(DB_PASSWORD)@notes-db:5432/notes?sslmode=disable
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080

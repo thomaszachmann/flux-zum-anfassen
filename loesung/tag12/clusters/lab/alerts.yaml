@@ -1,0 +1,59 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Provider
+metadata:
+  name: echo
+  namespace: flux-system
+spec:
+  address: http://echo.echo.svc.cluster.local/
+  type: generic
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Alert
+metadata:
+  name: notes
+  namespace: flux-system
+spec:
+  eventSeverity: error
+  eventSources:
+  - kind: Kustomization
+    name: notes
+  providerRef:
+    name: echo
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Provider
+metadata:
+  name: github
+  namespace: flux-system
+spec:
+  address: https://github.com/thomaszachmann/flux-fleet
+  secretRef:
+    name: github-status
+  type: github
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Alert
+metadata:
+  name: github-status
+  namespace: flux-system
+spec:
+  eventSeverity: info
+  eventSources:
+  - kind: Kustomization
+    name: '*'
+  providerRef:
+    name: github
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Alert
+metadata:
+  name: image-updates
+  namespace: flux-system
+spec:
+  eventSeverity: info
+  eventSources:
+  - kind: ImageUpdateAutomation
+    name: '*'
+  providerRef:
+    name: echo

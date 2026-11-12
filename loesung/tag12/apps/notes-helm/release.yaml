@@ -1,0 +1,29 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: notes
+  namespace: notes-helm
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: notes-chart
+    namespace: notes-helm
+  interval: 10m0s
+  serviceAccountName: notes-helm
+  values:
+    nodePort: 30090
+  valuesFrom:
+    - kind: ConfigMap
+      name: notes-values
+    - kind: Secret
+      name: notes-secret-values
+  driftDetection:
+    mode: enabled
+  timeout: 1m
+  upgrade:
+    remediation:
+      retries: 1
+      remediateLastFailure: true
+  test:
+    enable: true
