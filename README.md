@@ -1,41 +1,40 @@
-# Flux zum Anfassen – Begleitcode
+# Flux hands-on – Companion Code
 
-Begleitcode zum Buch **Flux zum Anfassen** – GitOps für Kubernetes mit Flux:
-Bootstrap, Sources von Git bis OCI, Kustomization, HelmRelease, SOPS, Image
-Automation, Notifications, Multi-Tenancy, CI und Plattform-APIs mit kro. Teil der Reihe
-IT-Trainingslager von Thomas Zachmann.
+Companion code for the book **Flux hands-on** (German edition: *Flux zum Anfassen*) – GitOps for
+Kubernetes with Flux: bootstrap, sources from Git to OCI, Kustomization, HelmRelease, SOPS, image
+automation, notifications, multi-tenancy, CI and platform APIs with kro. Part of Thomas
+Zachmann's IT Drills series.
 
-Buchseite: https://it-trainingslager.de/buecher/flux
+Book page: https://itdrills.com/books/flux · German edition: https://it-trainingslager.de/buecher/flux
 
-Der Code begleitet das Buch; Erklärungen und Übungen stehen im Buch. Dein Fleet-Repo
-baust du im Buch selbst – hier liegt sein Stand am Ende jedes Tags zum Vergleichen und
-die Dateien für den Wettkampf. Alle Schlüssel und Passwörter sind Laborwerte – nie in
-Produktion verwenden.
+The code accompanies the book; explanations and exercises are in the book. You build your fleet
+repo yourself as you work through the book – this repo holds its state at the end of each day for
+comparison, plus the files for the competition. All keys and passwords are lab values – never use
+them in production.
 
-Getestet mit k3s 1.37.2, Flux 2.10.0, Helm 4.3.1, SOPS 3.13.3, age 1.3.2 und kro 0.10.0.
+Tested with k3s 1.37.2, Flux 2.10.0, Helm 4.3.1, SOPS 3.13.3, age 1.3.2 and kro 0.10.0.
 
-## Inhalt
+## Contents
 
-- `loesung/tagNN/` – Stand des Fleet-Repos (`apps/`, `infrastructure/`, `clusters/lab/`,
-  ab Tag 12 `tenants/`) am Ende jedes Tags, ohne die von `flux bootstrap` erzeugten
-  `gotk-*.yaml`. Ab Tag 6 liegt unter `charts/` das notes-Chart.
-- `loesung/tag12/team/`, `loesung/tag14/team/` – die Artefakte der Teams
-- `loesung/pruefung/` – Lösungen der Abschlussprüfung (Anhang B)
-- `wettkampf/rundeN/` – Dateien, mit denen die Runden in Tag 15 beginnen
+- `loesung/tagNN/` – state of the fleet repo (`apps/`, `infrastructure/`, `clusters/lab/`,
+  from Day 12 `tenants/`) at the end of each day, without the `gotk-*.yaml` files generated
+  by `flux bootstrap`. From Day 6, `charts/` contains the notes chart.
+- `loesung/tag12/team/`, `loesung/tag14/team/` – the teams' artifacts
+- `loesung/pruefung/` – solutions to the final exam (Appendix B)
+- `wettkampf/rundeN/` – files the rounds of Day 15 start with
 
-Die mit SOPS verschlüsselten Dateien (`secret*.yaml`) sind mit einem anderen
-age-Schlüssel verschlüsselt als deine. Vergleiche sie deshalb nicht mit `diff`.
+The SOPS-encrypted files (`secret*.yaml`) are encrypted with a different age key than
+yours, so don't compare them with `diff`.
 
-## Schnellstart
+## Quick start
 
 ```bash
 git clone https://github.com/thomaszachmann/flux-zum-anfassen.git ~/flux-lab/code
 diff -r ~/flux-lab/fleet/apps ~/flux-lab/code/loesung/tag02/apps
 ```
 
-Details stehen im Kapitel „Tag 0“ des Buchs.
+Details are in the book's "Day 0" chapter.
 
-## Lizenz
+## License
 
-Code: MIT (siehe LICENSE). Buchtexte, Abbildungen und Cover sind nicht Teil dieses Repos
-und nicht lizenziert.
+Code: MIT (see LICENSE). Book text, figures and cover are not part of this repo and are not licensed.
